@@ -7,22 +7,50 @@
 
 
 // Include the twitter NPM package (Remember to run "npm install twitter")
-var twit = require('twitter');
+var Twitter = require('twitter');
 
 // Take in the command line arguments
 var input = process.argv;
 
-// Create an empty string for holding the address
+// Create an empty string for holding the action
 var action = "";
 
-// Capture all the words in the action ( ignoring the first two Node arguments)
+// Capture all the words in the input ( ignoring the first two Node arguments)
 for (var i=2; i<input.length; i++){
 
-        // Build a string with the address.
+        // Build a string with the action.
         action = action + "" + input[i];
-        console.log(action);
-
+       
 }
+
+
+if ( action === 'my-tweets'){
+
+
+// Include key.js file
+        var keys = require('./keys');
+
+        var client = new Twitter(keys.twitterKeys);
+
+        var params = {screen_name: 'nodejs', count: 4, screen_name: 'RabinDima'};
+
+        client.get('statuses/user_timeline', params, function(error, tweets, response) {
+          
+          if (!error) {
+            console.log(tweets);
+          }
+        });
+ }else if (action === 'spotify-this-song'){
+        }else {
+        console.log("Dont understand your request!");       
+        }
+// client.get('favorites/list', function(error, tweets, response) {
+//   if(error) throw error;
+//   console.log(tweets);  // The favorites. 
+//   console.log(response);  // Raw response object. 
+// });
+
+
 
                 // // Then use the Google Geocoder to geocode the address
                 // geocoder.geocode(address, function(err, data){
