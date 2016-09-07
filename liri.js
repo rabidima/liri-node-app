@@ -8,47 +8,59 @@
 
 // Include the twitter NPM package (Remember to run "npm install twitter")
 var Twitter = require('twitter');
-
+var spotify = require('spotify');
+ 
 // Take in the command line arguments
-var input = process.argv;
+var input = process.argv[2];
 
 // Create an empty string for holding the action
 var action = "";
-
 // Capture all the words in the input ( ignoring the first two Node arguments)
-for (var i=2; i<input.length; i++){
+for (var i=0; i<input.length; i++){
 
         // Build a string with the action.
         action = action + "" + input[i];
        
 }
 
+var inputSong = process.argv[3];
+var song = "";
+
+for (var a=0; a<inputSong.length; a++){
+    song = song + "" + inputSong[a];
+}
 
 if ( action === 'my-tweets'){
-
-
-// Include key.js file
+        // Include key.js file
         var keys = require('./keys');
-
+        // Authorization 
         var client = new Twitter(keys.twitterKeys);
-
+        // Set up parameters for tweets
         var params = {screen_name: 'nodejs', count: 4, screen_name: 'RabinDima'};
-
+        // Search in timeline tweets that mach parameters
         client.get('statuses/user_timeline', params, function(error, tweets, response) {
           
           if (!error) {
             console.log(tweets);
           }
         });
- }else if (action === 'spotify-this-song'){
-        }else {
-        console.log("Dont understand your request!");       
+
+}else if (action === 'spotify-this-song' && typeof song != "undefined"){
+
+
+        spotify.search({ type: 'track', query: song }, function(err, data) {
+            if ( err ) {
+                console.log('Error occurred: ' + err);
+                return;
+            }
+            console.log("Song name: " + song + " Autor is " + data.tracks.items[0].artists[0].name);
+            console.log(data.tracks.items[0].artists[0].name);
+        });
+
+}else {
+        console.log("Dont understand your request!");  
+        console.log(song);     
         }
-// client.get('favorites/list', function(error, tweets, response) {
-//   if(error) throw error;
-//   console.log(tweets);  // The favorites. 
-//   console.log(response);  // Raw response object. 
-// });
 
 
 
